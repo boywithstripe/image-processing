@@ -1,5 +1,5 @@
 //#include "stdafx.h"
-/*¼ÆËãhsvÍ¼ÏñµÄÖ±·½Í¼*/
+/*è®¡ç®—hsvå›¾åƒçš„ç›´æ–¹å›¾*/
 #include <iostream>
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -12,13 +12,13 @@ using namespace cv;
 class CalcHistogram
 {
 private:
-	int histSize[3];         //Ö±·½Í¼ÏîµÄÊıÁ¿
-	float hranges[2];        //hÍ¨µÀÏñËØµÄ×îĞ¡ºÍ×î´óÖµ
-	float sranges[2];        //sÍ¨µÀÏñËØµÄ×îĞ¡ºÍ×î´óÖµ
-	float vranges[2];        //vÍ¨µÀÏñËØµÄ×îĞ¡ºÍ×î´óÖµ
-	const float* ranges[3];  //¸÷Í¨µÀµÄ·¶Î§
-	int channels[3];         //Èı¸öÍ¨µÀ
-	int dims;                //Ö±·½Í¼µÄÎ¬Êı
+	int histSize[3];         //ç›´æ–¹å›¾é¡¹çš„æ•°é‡
+	float hranges[2];        //hé€šé“åƒç´ çš„æœ€å°å’Œæœ€å¤§å€¼
+	float sranges[2];        //sé€šé“åƒç´ çš„æœ€å°å’Œæœ€å¤§å€¼
+	float vranges[2];        //vé€šé“åƒç´ çš„æœ€å°å’Œæœ€å¤§å€¼
+	const float* ranges[3];  //å„é€šé“çš„èŒƒå›´
+	int channels[3];         //ä¸‰ä¸ªé€šé“
+	int dims;                //ç›´æ–¹å›¾çš„ç»´æ•°
 
 public:
 	CalcHistogram(int hbins = 30, int sbins = 32, int vbins = 32)
@@ -45,15 +45,15 @@ public:
 Mat CalcHistogram::getHistogram(const Mat& image)
 {
 	Mat hist;
-	calcHist(&image,  //µ¼ÈëMatÀàÊı×é
-		1,            //ÓëimageÒ»ÆğµÄ£¬1ËµÃ÷Ö»ÓĞÒ»ÕÅÍ¼
+	calcHist(&image,  //å¯¼å…¥Matç±»æ•°ç»„
+		1,            //ä¸imageä¸€èµ·çš„ï¼Œ1è¯´æ˜åªæœ‰ä¸€å¼ å›¾
 		channels,     //const* channels 
-		Mat(),        //Mat()£º¹¹Ôìº¯Êı£¬´Ë´¦ÎªÑÚÄ£×÷ÓÃ£¬ÑÚÄ£¶àÓÃÀ´¶ÔÍ¼Ïñ½øĞĞ²Ã¼ô
-		hist,         //Êä³öÖ±·½Í¼Êı×é£¬dimsÎ¬
-		dims,         //È·¶¨Î¬¶È£¬HSVÈı¸öÌØÕ÷£¬È¡ÈıÎ¬
-		histSize,     //ÓÃÓÚÖ¸³öÖ±·½Í¼Êı×éÃ¿Ò»Î¬µÄ´óĞ¡µÄÊı×é£¬¼´Ö¸³öÃ¿Ò»Î¬µÄbinµÄ¸öÊıµÄÊı×é
+		Mat(),        //Mat()ï¼šæ„é€ å‡½æ•°ï¼Œæ­¤å¤„ä¸ºæ©æ¨¡ä½œç”¨ï¼Œæ©æ¨¡å¤šç”¨æ¥å¯¹å›¾åƒè¿›è¡Œè£å‰ª
+		hist,         //è¾“å‡ºç›´æ–¹å›¾æ•°ç»„ï¼Œdimsç»´
+		dims,         //ç¡®å®šç»´åº¦ï¼ŒHSVä¸‰ä¸ªç‰¹å¾ï¼Œå–ä¸‰ç»´
+		histSize,     //ç”¨äºæŒ‡å‡ºç›´æ–¹å›¾æ•°ç»„æ¯ä¸€ç»´çš„å¤§å°çš„æ•°ç»„ï¼Œå³æŒ‡å‡ºæ¯ä¸€ç»´çš„binçš„ä¸ªæ•°çš„æ•°ç»„
 		ranges,       //
-		true,      //Ö±·½Í¼Ã¿Ò»Î¬µÄhistSizeÊÇ¾ùÔÈµÄ
+		true,      //ç›´æ–¹å›¾æ¯ä¸€ç»´çš„histSizeæ˜¯å‡åŒ€çš„
 		false
 	);
 
@@ -70,10 +70,10 @@ void CalcHistogram::getHistogramImage(const Mat& image)
 	float* hist_sta = new float[sbins];
 	float* hist_val = new float[vbins];
 	float* hist_hue = new float[hbins];
-	memset(hist_val, 0, vbins * sizeof(float)); //½«hist_val³õÊ¼»¯Îª0
-	// memsetº¯ÊıµÄÔ­ĞÍÊÇ extern void *memset(void *buffer, int c, int count)£»
-	// buffer ÊÇÖ¸Õë»òÕßÊı×é£¬voidÊÇÒª³õÊ¼»¯µÄÊ×ÄÚ´æµÄÊ×µØÖ·£»aÊÇÒª³õÊ¼»¯µÄ±äÎªµÄÊı¾İ£¬countÊÇbufferµÄ³¤¶È£¬¼´´óĞ¡
-	// ×÷ÓÃ£ºÇå¿ÕÊı×ébuffer
+	memset(hist_val, 0, vbins * sizeof(float)); //å°†hist_valåˆå§‹åŒ–ä¸º0
+	// memsetå‡½æ•°çš„åŸå‹æ˜¯ extern void *memset(void *buffer, int c, int count)ï¼›
+	// buffer æ˜¯æŒ‡é’ˆæˆ–è€…æ•°ç»„ï¼Œvoidæ˜¯è¦åˆå§‹åŒ–çš„é¦–å†…å­˜çš„é¦–åœ°å€ï¼›aæ˜¯è¦åˆå§‹åŒ–çš„å˜ä¸ºçš„æ•°æ®ï¼Œcountæ˜¯bufferçš„é•¿åº¦ï¼Œå³å¤§å°
+	// ä½œç”¨ï¼šæ¸…ç©ºæ•°ç»„buffer
 	memset(hist_sta, 0, sbins * sizeof(float));
 	memset(hist_hue, 0, hbins * sizeof(float));
 
@@ -114,7 +114,7 @@ void CalcHistogram::getHistogramImage(const Mat& image)
 
 	for (int i = 0; i < sbins; ++i)
 	{
-		//cvRound(double value):·µ»Ø×î½Ó½üµÄÕûÊı¡ª¡ªËÄÉáÎåÈë
+		//cvRound(double value):è¿”å›æœ€æ¥è¿‘çš„æ•´æ•°â€”â€”å››èˆäº”å…¥
 		int intensity = cvRound(hist_sta[i] * (sta_img.rows - 10) / max_sta);
 		rectangle(sta_img, Point(i * scale + 10, sta_img.rows - intensity), Point((i + 1) * scale - 1 + 10, sta_img.rows - 1), Scalar(0, 255, 0), 1);
 	}
@@ -140,7 +140,7 @@ void CalcHistogram::getHistogramImage(const Mat& image)
 
 int main()
 {
-	Mat src = imread("E:\\Ñ§Ï°×ÊÁÏ\\ÑĞÒ»ÏÂ\\ÊÓÆµÍ¼Ïñ´¦Àí_Ã©\\homework_NeedHandIn\\»ğÑæ¼ì²â\\image1.jpg"), hsv;
+	Mat src = imread("E:\\å­¦ä¹ èµ„æ–™\\ç ”ä¸€ä¸‹\\è§†é¢‘å›¾åƒå¤„ç†_èŒ…\\homework_NeedHandIn\\ç«ç„°æ£€æµ‹\\image1.jpg"), hsv;
 	if (!src.data)
 	{
 		cout << "error, the image is not built!" << endl;
