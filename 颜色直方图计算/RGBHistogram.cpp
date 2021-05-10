@@ -7,14 +7,14 @@
 
 using namespace std;
 using namespace cv;
-void ShowHistogram(Mat& Orimage);   //ÏÔÊ¾Ö±·½Í¼
+void ShowHistogram(Mat& Orimage);   //æ˜¾ç¤ºç›´æ–¹å›¾
 
 
 int main()
 {
-	Mat image = imread("E:\\Ñ§Ï°×ÊÁÏ\\ÑĞÒ»ÏÂ\\ÊÓÆµÍ¼Ïñ´¦Àí_Ã©\\homework_NeedHandIn\\»ğÑæ¼ì²â\\image1.jpg");
+	Mat image = imread("E:\\å­¦ä¹ èµ„æ–™\\ç ”ä¸€ä¸‹\\è§†é¢‘å›¾åƒå¤„ç†_èŒ…\\homework_NeedHandIn\\ç«ç„°æ£€æµ‹\\image1.jpg");
 	if (image.empty()) {
-		cout << "Í¼Æ¬¶ÁÈ¡Ê§°Ü£¡" << endl;
+		cout << "å›¾ç‰‡è¯»å–å¤±è´¥ï¼" << endl;
 	}
 	imshow("Original Image", image);
 	//imshow("firedetection", FireDetection(image));
@@ -34,7 +34,7 @@ void ShowHistogram(Mat& Orimage)
 
 	Mat image = Orimage.clone();
 	uchar* p;
-	//½«ºìÂÌÀ¶ÈıÔªËØ·ÖÁ¿·Ö±ğ·ÅÈëÈı¸öÊı×éÖĞ
+	//å°†çº¢ç»¿è“ä¸‰å…ƒç´ åˆ†é‡åˆ†åˆ«æ”¾å…¥ä¸‰ä¸ªæ•°ç»„ä¸­
 	for (int n = 0; n <= 2; n++)
 	{
 		for (int i = 0; i < image.rows; i++)
@@ -53,20 +53,20 @@ void ShowHistogram(Mat& Orimage)
 
 	for (int i = 0; i <= 255; i++)
 	{
-		cout << "ºìÉ«ÏñËØÎª£º " << i << "  µÄ¸öÊı£º " << redHistogram[i] << endl;
+		cout << "çº¢è‰²åƒç´ ä¸ºï¼š " << i << "  çš„ä¸ªæ•°ï¼š " << redHistogram[i] << endl;
 	}
 
 	for (int i = 0; i <= 255; i++)
 	{
-		cout << "ÂÌÉ«ÏñËØÎª£º " << i << "  µÄ¸öÊı£º " << greenHistogram[i] << endl;
+		cout << "ç»¿è‰²åƒç´ ä¸ºï¼š " << i << "  çš„ä¸ªæ•°ï¼š " << greenHistogram[i] << endl;
 	}
 
 	for (int i = 0; i <= 255; i++)
 	{
-		cout << "À¶É«ÏñËØÎª£º " << i << "  µÄ¸öÊı£º " << blueHistogram[i] << endl;
+		cout << "è“è‰²åƒç´ ä¸ºï¼š " << i << "  çš„ä¸ªæ•°ï¼š " << blueHistogram[i] << endl;
 	}
 
-	//ÕÒµ½Ã¿Ò»¸öÖ±·½Í¼Í³¼Æ¾ØÕóµÄ×î´óÖµ
+	//æ‰¾åˆ°æ¯ä¸€ä¸ªç›´æ–¹å›¾ç»Ÿè®¡çŸ©é˜µçš„æœ€å¤§å€¼
 	int Max_redhi = 0;
 	int Max_greenhi = 0;
 	int Max_bluehi = 0;
@@ -81,14 +81,14 @@ void ShowHistogram(Mat& Orimage)
 	Mat greenhi_image = Mat::zeros(266, 256, CV_8UC3);
 	Mat bluehi_image = Mat::zeros(256, 256, CV_8UC3);
 
-	//»æÖÆºìÂÌÀ¶ÈıÔªËØµÄÖ±·½Í¼
-	//»æÖÆÖ±·½Í¼ĞèÒªÓÃµ½º¯Êı£ºrectangle(Mat& image,Point pt1,Point pt2,Scalar &color,int thickness=1,int lineType=8,intshift=0)
-	/****     rectangle(cv::InputOutputArrar img  ¿ÉÒÔÊÇMatÀàĞÍ£¬±íÊ¾Ö±·½Í¼Í¼Æ¬£¬½«Ö±·½Í¼´æ´¢ÔÚ±äÁ¿imgÖĞ
-	*					Point pt1   Point×ø±êÀàĞÍ£¬±íÊ¾Ëù»­¾ØÕóµÄ×óÉÏ½Ç×ø±ê£¬ÒÔÍ¼Æ¬ÎªÀı£¬xÖáÎªÍ¼Æ¬×îÉÏÃæÒ»ÌõÏß¼´ĞĞ=0µÄÏß(·½ÏòÎª£º´Ó×óµ½ÓÒ)
-	*					Point pt2   ÁíÍâÒ»µã£¨Á½¸ö¶Ô½ÇµãÈ·¶¨Ò»¸ö¾ØÕó£©
-	*					Scalar &color  ÑÕÉ«£¨0£¬0£¬0£©ÎªºÚÉ«£¨255£¬255£¬255£©Îª°×É«
-	*					ÆäËû¿´×ÖÃæÒâË¼¼´¿É
-	* ĞèÒª×¢ÒâµÄÊÇ×ø±êÏòÁ¿µÄ¶¨Òå£¬xÖáÎª×îÉÏÃæÒ»ÌõÏß£¬·½Ïò£º´Ó×óµ½ÓÒ
+	//ç»˜åˆ¶çº¢ç»¿è“ä¸‰å…ƒç´ çš„ç›´æ–¹å›¾
+	//ç»˜åˆ¶ç›´æ–¹å›¾éœ€è¦ç”¨åˆ°å‡½æ•°ï¼šrectangle(Mat& image,Point pt1,Point pt2,Scalar &color,int thickness=1,int lineType=8,intshift=0)
+	/****     rectangle(cv::InputOutputArrar img  å¯ä»¥æ˜¯Matç±»å‹ï¼Œè¡¨ç¤ºç›´æ–¹å›¾å›¾ç‰‡ï¼Œå°†ç›´æ–¹å›¾å­˜å‚¨åœ¨å˜é‡imgä¸­
+	*					Point pt1   Pointåæ ‡ç±»å‹ï¼Œè¡¨ç¤ºæ‰€ç”»çŸ©é˜µçš„å·¦ä¸Šè§’åæ ‡ï¼Œä»¥å›¾ç‰‡ä¸ºä¾‹ï¼Œxè½´ä¸ºå›¾ç‰‡æœ€ä¸Šé¢ä¸€æ¡çº¿å³è¡Œ=0çš„çº¿(æ–¹å‘ä¸ºï¼šä»å·¦åˆ°å³)
+	*					Point pt2   å¦å¤–ä¸€ç‚¹ï¼ˆä¸¤ä¸ªå¯¹è§’ç‚¹ç¡®å®šä¸€ä¸ªçŸ©é˜µï¼‰
+	*					Scalar &color  é¢œè‰²ï¼ˆ0ï¼Œ0ï¼Œ0ï¼‰ä¸ºé»‘è‰²ï¼ˆ255ï¼Œ255ï¼Œ255ï¼‰ä¸ºç™½è‰²
+	*					å…¶ä»–çœ‹å­—é¢æ„æ€å³å¯
+	* éœ€è¦æ³¨æ„çš„æ˜¯åæ ‡å‘é‡çš„å®šä¹‰ï¼Œxè½´ä¸ºæœ€ä¸Šé¢ä¸€æ¡çº¿ï¼Œæ–¹å‘ï¼šä»å·¦åˆ°å³
 	)
 	*
 	*************/
