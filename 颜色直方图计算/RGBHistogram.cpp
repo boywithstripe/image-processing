@@ -92,6 +92,7 @@ void ShowHistogram(Mat& Orimage)
 	)
 	*
 	*************/
+	/* 画图有点问题
 	for (int i = 0; i < 256; i++)
 	{
 		int RedValue = redHistogram[i] / Max_redhi * 256;
@@ -108,6 +109,8 @@ void ShowHistogram(Mat& Orimage)
 	imshow("redHistogram", redhi_image);
 	imshow("greenHistogram", greenhi_image);
 	imshow("blueHistogram", bluehi_image);
+	
+	*/
 
 	delete[] redHistogram;
 	delete[] greenHistogram;
