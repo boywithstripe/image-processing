@@ -1,8 +1,8 @@
 /*
-*  ÊµÏÖÖĞÖµÂË²¨(Ëã·¨À´Ô´£ºA Fast Two-Dimensional Median Filtering Algorithm)
-*  »·¾³£ºopencv4.4   debug  x64
-*  ²©¿ÍÁ´½Ó£º
-*  ½ö¹©Ñ§Ï°
+*  å®ç°ä¸­å€¼æ»¤æ³¢(ç®—æ³•æ¥æºï¼šA Fast Two-Dimensional Median Filtering Algorithm)
+*  ç¯å¢ƒï¼šopencv4.4   debug  x64
+*  åšå®¢é“¾æ¥ï¼š
+*  ä»…ä¾›å­¦ä¹ 
 */
 
 
@@ -26,25 +26,25 @@ int main()
 	Mat image1 = imread("salt_pepper_Image.jpg",IMREAD_GRAYSCALE);
 	if (image1.empty())
 	{
-		cout << "¶ÁÈ¡Í¼Æ¬Ê§°Ü¡£" << endl;
+		cout << "è¯»å–å›¾ç‰‡å¤±è´¥ã€‚" << endl;
 	}
 	imshow("Origin Image", image1);
 
 
 
-	//ÖĞÖµÂË²¨,µ÷ÓÃopencv×Ô´øµÄº¯Êı 
+	//ä¸­å€¼æ»¤æ³¢,è°ƒç”¨opencvè‡ªå¸¦çš„å‡½æ•° 
 	Mat result1;
 	medianBlur(image1, result1, 3);
-	imshow("Result1 Image(after median fluter,opencv×Ô´ø)", result1);
+	imshow("Result1 Image(after median fluter,opencvè‡ªå¸¦)", result1);
 
-	//¿ìËÙÖĞÖµÂË²¨£¬ÀûÓÃ×Ô¼º±àĞ´µÄº¯Êı
+	//å¿«é€Ÿä¸­å€¼æ»¤æ³¢ï¼Œåˆ©ç”¨è‡ªå·±ç¼–å†™çš„å‡½æ•°
 	Mat result2;
 
-	//Ö±½Óclone¹ıÈ¥¼´¿É£¬ÖĞ¼ä²¿·Ö»áËæ×ÅÂË²¨¹ı³ÌµÄ½øĞĞËæÖ®¸Ä±ä
+	//ç›´æ¥cloneè¿‡å»å³å¯ï¼Œä¸­é—´éƒ¨åˆ†ä¼šéšç€æ»¤æ³¢è¿‡ç¨‹çš„è¿›è¡Œéšä¹‹æ”¹å˜
 	result2 = image1.clone();
 	//ResImage = OriImage.clone();
 	QuickMedianFluter(image1, result2, 3);
-	imshow("Result2 Image(×ÔÎÒ±àĞ´º¯Êı)", result2);
+	imshow("Result2 Image(è‡ªæˆ‘ç¼–å†™å‡½æ•°)", result2);
 
 
 	waitKey(0);
@@ -54,34 +54,34 @@ int main()
 
 
 /***********************************************************
-* º¯Êı¹¦ÄÜ£ºÖĞÖµÂË²¨(ÀûÓÃÖ±·½Í¼·¨¿ìËÙÊµÏÖ)
-* ²ÎÊı½éÉÜ£ºOriInage:Ô­Í¼    ResImage:ÂË²¨ºóµÄÍ¼
-*			size:ÂË²¨Æ÷(»òÕßÁìÓò)±ß³¤£¬´óĞ¡Îªsize x size(Èç3x3) 
+* å‡½æ•°åŠŸèƒ½ï¼šä¸­å€¼æ»¤æ³¢(åˆ©ç”¨ç›´æ–¹å›¾æ³•å¿«é€Ÿå®ç°)
+* å‚æ•°ä»‹ç»ï¼šOriInage:åŸå›¾    ResImage:æ»¤æ³¢åçš„å›¾
+*			size:æ»¤æ³¢å™¨(æˆ–è€…é¢†åŸŸ)è¾¹é•¿ï¼Œå¤§å°ä¸ºsize x size(å¦‚3x3) 
 ***********************************************************/
 
 
 
 void QuickMedianFluter(Mat OriImage, Mat& ResImage, int size)
 {
-	int m = OriImage.rows;   //mÊÇĞĞ£¬¶ÔÓ¦ÏÂÃæµÄx
-	int n = OriImage.cols;   //nÊÇÁĞ£¬¶ÔÓ¦ÏÂÃæµÄn
+	int m = OriImage.rows;   //mæ˜¯è¡Œï¼Œå¯¹åº”ä¸‹é¢çš„x
+	int n = OriImage.cols;   //næ˜¯åˆ—ï¼Œå¯¹åº”ä¸‹é¢çš„n
 	int *Histogram = new int[256];
 	memset(Histogram, 0, 256 * sizeof(int));
-	int radius = size / 2;    //°ë¾¶
-	int th = size * size / 2 + 1;    //Ëã·¨ÖĞµÄth
-	int median = 0;     //±£´æÖ±·½Í¼ÖĞµÄÖĞÖµ¶ÔÓ¦µÄÏñËØ
-	int mNum = 0;       //±£´æĞ¡ÓÚÖĞÖµÏñËØmedianµÄ×Ü¸öÊı
-	int left = 0;       //×î×óÁĞ½«ÒªÒÆ³ıµÄ
-	int right = 0;      //×îÓÒ±ß½«Òª¼ÓÈëµÄ
+	int radius = size / 2;    //åŠå¾„
+	int th = size * size / 2 + 1;    //ç®—æ³•ä¸­çš„th
+	int median = 0;     //ä¿å­˜ç›´æ–¹å›¾ä¸­çš„ä¸­å€¼å¯¹åº”çš„åƒç´ 
+	int mNum = 0;       //ä¿å­˜å°äºä¸­å€¼åƒç´ mediançš„æ€»ä¸ªæ•°
+	int left = 0;       //æœ€å·¦åˆ—å°†è¦ç§»é™¤çš„
+	int right = 0;      //æœ€å³è¾¹å°†è¦åŠ å…¥çš„
 
-	cout << "ĞĞ£º" << m << endl;
-	cout << "ÁĞ£º" << n << endl;
+	cout << "è¡Œï¼š" << m << endl;
+	cout << "åˆ—ï¼š" << n << endl;
 
 
-	//´¦Àí±ß½ç£¬±ß½çÃ»·¨½øĞĞÖĞÖµÂË²¨£¬Òò´Ë½«±ß½çËùÓĞÏñËØ¸³Öµ¸øResImage
-	for (int i = radius; i < m - radius; i++)  //mÊÇĞĞ£¬¶ÔÓ¦x´ÓÉÏÖÁÏÂ
+	//å¤„ç†è¾¹ç•Œï¼Œè¾¹ç•Œæ²¡æ³•è¿›è¡Œä¸­å€¼æ»¤æ³¢ï¼Œå› æ­¤å°†è¾¹ç•Œæ‰€æœ‰åƒç´ èµ‹å€¼ç»™ResImage
+	for (int i = radius; i < m - radius; i++)  //mæ˜¯è¡Œï¼Œå¯¹åº”xä»ä¸Šè‡³ä¸‹
 	{
-		//³õÊ¼»¯Histogram
+		//åˆå§‹åŒ–Histogram
 		memset(Histogram, 0, 256 * sizeof(int));
 		for (int k = i-radius; k <= i+radius; k++)
 		{
@@ -94,11 +94,11 @@ void QuickMedianFluter(Mat OriImage, Mat& ResImage, int size)
 		ResImage.at<uchar>(i,radius) = median;
 
 
-		for (int j = radius; j < n - radius; j++)   //nÊÇÁĞ£¬¶ÔÓ¦y´Ó×óÖÁÓÒ
+		for (int j = radius; j < n - radius; j++)   //næ˜¯åˆ—ï¼Œå¯¹åº”yä»å·¦è‡³å³
 		{
-			//jÔÚradius´¦£¬Ö±·½Í¼ÒÑÇó£¬Ìø¹ı
+			//jåœ¨radiuså¤„ï¼Œç›´æ–¹å›¾å·²æ±‚ï¼Œè·³è¿‡
 			if (j == radius) continue;   
-			//¸ù¾İËã·¨£¬ÖĞĞÄÏòÓÒÒÆ¶¯Ò»Î»£¬½«×î×óÁĞµÄÊıÒÆ³ıÖ±·½Í¼ÖĞ
+			//æ ¹æ®ç®—æ³•ï¼Œä¸­å¿ƒå‘å³ç§»åŠ¨ä¸€ä½ï¼Œå°†æœ€å·¦åˆ—çš„æ•°ç§»é™¤ç›´æ–¹å›¾ä¸­
 			for (int k = i-radius; k <= i + radius; k++)
 			{
 				left = OriImage.at<uchar>(k, j - 1 - radius);
@@ -106,7 +106,7 @@ void QuickMedianFluter(Mat OriImage, Mat& ResImage, int size)
 				if (left <= median) mNum = mNum - 1;
 			}
 			
-			//¸ù¾İËã·¨£¬ÖĞĞÄÏòÓÒÒÆ¶¯Ò»Î»£¬½«×îÓÒ²àµÄÊıÒÆÈëÖ±·½Í¼ÖĞ
+			//æ ¹æ®ç®—æ³•ï¼Œä¸­å¿ƒå‘å³ç§»åŠ¨ä¸€ä½ï¼Œå°†æœ€å³ä¾§çš„æ•°ç§»å…¥ç›´æ–¹å›¾ä¸­
 			for (int k = i-radius; k <= i + radius; k++)
 			{
 				right = OriImage.at<uchar>(k, j + radius);
@@ -120,17 +120,17 @@ void QuickMedianFluter(Mat OriImage, Mat& ResImage, int size)
 				continue;
 
 			}
-			//ÀûÓÃÇ°Ò»ÖĞÖµºÍËùÓĞĞ¡ÓÚµÈÓÚÖĞÖµmedianµÄÊımNum,Çóµ±Ç°ÖĞÖµ
+			//åˆ©ç”¨å‰ä¸€ä¸­å€¼å’Œæ‰€æœ‰å°äºç­‰äºä¸­å€¼mediançš„æ•°mNum,æ±‚å½“å‰ä¸­å€¼
 			if (mNum < th)
 			{
-				//Ğ¡ÓÚth(µÚth¸öÊıÎªÖĞÖµ)£¬ÔÚµ±Ç°medianÓÒ±ß£¬ÍùÓÒÕÒ£¨ÏñËØ¼ÓÒ»Ñ°ÕÒ£©
+				//å°äºth(ç¬¬thä¸ªæ•°ä¸ºä¸­å€¼)ï¼Œåœ¨å½“å‰medianå³è¾¹ï¼Œå¾€å³æ‰¾ï¼ˆåƒç´ åŠ ä¸€å¯»æ‰¾ï¼‰
 				while (mNum < th) {
 					median = median + 1;
 					mNum = mNum + Histogram[median];
 				}
 			}
 			else {
-				//´óÓÚth(µÚth¸öÊıÎªÖĞÖµ)£¬ÔÚµ±Ç°median×ó±ß£¬ÍùÓÒÕÒ£¨ÏñËØ¼õÒ»Ñ°ÕÒ£©
+				//å¤§äºth(ç¬¬thä¸ªæ•°ä¸ºä¸­å€¼)ï¼Œåœ¨å½“å‰medianå·¦è¾¹ï¼Œå¾€å³æ‰¾ï¼ˆåƒç´ å‡ä¸€å¯»æ‰¾ï¼‰
 				while (mNum > th)
 				{
 					mNum = mNum - Histogram[median];
@@ -146,18 +146,18 @@ void QuickMedianFluter(Mat OriImage, Mat& ResImage, int size)
 }
 
 /**************************************************************
-* º¯Êı¹¦ÄÜ£ºÍ¨¹ıÖ±·½Í¼·µ»ØÖĞÖµ
-* ²ÎÊı½éÉÜ£ºH[]:Ö±·½Í¼Êı×é  n:Ö±·½Í¼Î¬Êı
-*			size:ÂË²¨Æ÷µÄ´óĞ¡
+* å‡½æ•°åŠŸèƒ½ï¼šé€šè¿‡ç›´æ–¹å›¾è¿”å›ä¸­å€¼
+* å‚æ•°ä»‹ç»ï¼šH[]:ç›´æ–¹å›¾æ•°ç»„  n:ç›´æ–¹å›¾ç»´æ•°
+*			size:æ»¤æ³¢å™¨çš„å¤§å°
 ****************************************************************/
 
 
 
 int FindMedian(int H[], int n,int size,int &mNum)
 {
-	int median = 0;   //³õÊ¼»¯ÖĞÖµÎª0
-	int sum_cout = 0;  //ÇóºÍ
-	int median_flag = size * size / 2;  //ÖĞÖµ±êÖ¾
+	int median = 0;   //åˆå§‹åŒ–ä¸­å€¼ä¸º0
+	int sum_cout = 0;  //æ±‚å’Œ
+	int median_flag = size * size / 2;  //ä¸­å€¼æ ‡å¿—
 	for (int i = 0; i < 256; i++)
 	{
 		sum_cout += H[i];
