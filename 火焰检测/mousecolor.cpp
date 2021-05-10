@@ -22,15 +22,15 @@ void onMouse(int event, int x, int y, int flags, void* param)
 
 int main()
 {
-	cv::Mat image = cv::imread("E:\\学习资料\\研一下\\视频图像处理_茅\\homework_NeedHandIn\\火焰检测\\image6.jpg");//读取图片
+	cv::Mat image = cv::imread("E:\\瀛︿範璧勬枡\\鐮斾竴涓媆\瑙嗛鍥惧儚澶勭悊_鑼匼\homework_NeedHandIn\\鐏劙妫�娴媆\image6.jpg");//璇诲彇鍥剧墖
 	if (image.empty())
 	{
-		cout << "读取图片失败" << endl;
+		cout << "璇诲彇鍥剧墖澶辫触" << endl;
 	}
 	
-	cv::namedWindow("原始图像");
-	cv::setMouseCallback("原始图像", onMouse, reinterpret_cast<void*>(&image));
-	cv::imshow("原始图像", image);
+	cv::namedWindow("鍘熷鍥惧儚");
+	cv::setMouseCallback("鍘熷鍥惧儚", onMouse, reinterpret_cast<void*>(&image));
+	cv::imshow("鍘熷鍥惧儚", image);
 	cv::waitKey(0);
 	return 0;
 }
